@@ -1,13 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>client</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
+                    <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Personal Finance Tracker</span>
+            </div>
+            <div class="text-sm text-slate-400 font-medium" id="current-date"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="dollar-sign" class="w-16 h-16 text-white"></i>
+                </div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Total Monthly Spend</p>
+                <h3 class="text-3xl font-bold text-white tracking-tight" id="metric-total">$0.00</h3>
+            </div>
+            
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="trending-up" class="w-16 h-16 text-white"></i>
+                </div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Daily Average</p>
+                <h3 class="text-3xl font-bold text-emerald-400 tracking-tight" id="metric-avg">$0.00</h3>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="pie-chart" class="w-16 h-16 text-white"></i>
+                </div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Top Burn Category</p>
+                <h3 class="text-3xl font-bold text-violet-400 tracking-tight truncate" id="metric-top">None</h3>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 lg:col-span-1">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-5 h-5 text-emerald-400"></i> Log Transaction
+                </h2>
+                <form id="transaction-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Amount ($)</label>
+                        <input type="number" step="0.01" required id="amount" placeholder="0.00" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Category</label>
+                        <select id="category" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Subscriptions">Family</option>
+                            <option value="Shopping">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Description</label>
+                        <input type="text" required id="description" placeholder="e.g., AWS Bill, Coffee" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Date</label>
+                        <input type="date" required id="date" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <button type="submit" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-slate-950 font-semibold rounded-lg py-2.5 transition-colors duration-150 flex items-center justify-center gap-2 mt-2 shadow-lg shadow-emerald-500/10">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Commit Entry
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="list-filter" class="w-5 h-5 text-violet-400"></i> Audit Ledger
+                    </h2>
+                    <span class="text-xs bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md text-slate-400 font-medium" id="ledger-count">0 Transactions</span>
+                </div>
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-950/40 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    <th class="py-3.5 px-4">Date</th>
+                                    <th class="py-3.5 px-4">Description</th>
+                                    <th class="py-3.5 px-4">Category</th>
+                                    <th class="py-3.5 px-4 text-right">Amount</th>
+                                    <th class="py-3.5 px-4 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledger-body" class="divide-y divide-slate-800/60 text-sm">
+                                </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="hidden py-12 text-center text-slate-500 flex flex-col items-center justify-center gap-2">
+                        <i data-lucide="database-zap" class="w-8 h-8 text-slate-600"></i>
+                        <p class="font-medium">No records found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // State Controller
+        let state = {
+            transactions: JSON.parse(localStorage.getItem('ledger_data')) || [
+                { id: 1, amount: 45.50, category: 'Food', description: 'Team Lunch Outing', date: '2026-07-15' },
+                { id: 2, amount: 12.00, category: 'Subscriptions', description: 'GitHub Copilot', date: '2026-07-14' },
+                { id: 3, amount: 120.00, category: 'Utilities', description: 'AWS Cloud Hosting', date: '2026-07-10' }
+            ]
+        };
+
+        // DOM Cache
+        const form = document.getElementById('transaction-form');
+        const ledgerBody = document.getElementById('ledger-body');
+        const emptyState = document.getElementById('empty-state');
+        const mTotal = document.getElementById('metric-total');
+        const mAvg = document.getElementById('metric-avg');
+        const mTop = document.getElementById('metric-top');
+        const lCount = document.getElementById('ledger-count');
+
+        // Initialize App
+        function init() {
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            render();
+            lucide.createIcons();
+        }
+
+        // Commit State to Storage
+        function saveState() {
+            localStorage.setItem('ledger_data', JSON.stringify(state.transactions));
+        }
+
+        // Mutation Handlers
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTx = {
+                id: Date.now(),
+                amount: parseFloat(document.getElementById('amount').value),
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value
+            };
+            state.transactions.unshift(newTx);
+            saveState();
+            render();
+            form.reset();
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        });
+
+        window.deleteTransaction = function(id) {
+            state.transactions = state.transactions.filter(tx => tx.id !== id);
+            saveState();
+            render();
+        };
+
+        // Render Pipe
+        function render() {
+            // Metrics Processing
+            const txs = state.transactions;
+            lCount.innerText = `${txs.length} Transaction${txs.length === 1 ? '' : 's'}`;
+            
+            if (txs.length === 0) {
+                ledgerBody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                mTotal.innerText = '$0.00';
+                mAvg.innerText = '$0.00';
+                mTop.innerText = 'None';
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            // Math Reductions
+            const total = txs.reduce((acc, current) => acc + current.amount, 0);
+            mTotal.innerText = `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            
+            // Average calculation based on distinct days present in data context
+            const distinctDays = [...new Set(txs.map(t => t.date))].length || 1;
+            mAvg.innerText = `$${(total / distinctDays).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            // Top Category Processing Map
+            const catMap = {};
+            txs.forEach(t => catMap[t.category] = (catMap[t.category] || 0) + t.amount);
+            const topCat = Object.keys(catMap).reduce((a, b) => catMap[a] > catMap[b] ? a : b, 'None');
+            mTop.innerText = topCat;
+
+            // Render Table Rows
+            ledgerBody.innerHTML = txs.map(tx => `
+                <tr class="hover:bg-slate-900/40 transition-colors group">
+                    <td class="py-3 px-4 text-slate-400 font-medium">${tx.date}</td>
+                    <td class="py-3 px-4 font-semibold text-white">${tx.description}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${getCategoryBadgeClass(tx.category)}">
+                            ${tx.category}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-right font-bold text-slate-100">$${tx.amount.toFixed(2)}</td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="deleteTransaction(${tx.id})" class="text-slate-600 hover:text-rose-400 p-1 rounded transition-colors duration-150">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function getCategoryBadgeClass(cat) {
+            const mappings = {
+                'Food': 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+                'Transport': 'bg-sky-500/10 text-sky-400 border border-sky-500/20',
+                'Utilities': 'bg-rose-500/10 text-rose-400 border border-rose-500/20',
+                'Entertainment': 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
+                'Subscriptions': 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+                'Shopping': 'bg-pink-500/10 text-pink-400 border border-pink-500/20'
+            };
+            return mappings[cat] || 'bg-slate-800 text-slate-400';
+        }
+
+        // Fire
+        init();
+    </script>
+</body>
 </html>
