@@ -111,7 +111,7 @@ export default function FinanceDashboard() {
           <p className="text-slate-500 text-sm">Real-time dynamic balance & categorization tracker</p>
         </div>
         <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm min-w-[240px]">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Remaining Liquidity</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Remaining</p>
           <p className={`text-3xl font-extrabold tracking-tight ${remainingBalance >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
             ${remainingBalance.toFixed(2)}
           </p>
@@ -153,7 +153,6 @@ export default function FinanceDashboard() {
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="e.g., AWS Subscription, Salary"
                 className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800"
               />
             </div>
@@ -180,28 +179,15 @@ export default function FinanceDashboard() {
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800"
                 >
                   <option value="Food">Food</option>
-                  <option value="Rent">Rent</option>
-                  <option value="Utilities">Utilities</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Salary">Salary</option>
-                  <option value="Investments">Investments</option>
-                  <option value="Leisure">Leisure</option>
+                  <option value="Rent">Transport</option>
+                  <option value="Utilities">Family</option>
+                  <option value="Salary">Pocket money</option>
+                  <option value="Leisure">Other</option>
                 </select>
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Payment Mode</label>
-              <select
-                value={paymentMode}
-                onChange={(e) => setPaymentMode(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-800"
-              >
-                <option value="Card">Credit/Debit Card</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-                <option value="Cash">Cash</option>
-              </select>
-            </div>
+            
 
             <div>
               <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Remarks (Optional)</label>
@@ -225,9 +211,9 @@ export default function FinanceDashboard() {
 
         <div className="lg:col-span-2 space-y-6">
           <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4 tracking-tight border-b pb-2">Expense Allocation by Category</h2>
+            <h2 className="text-xl font-bold mb-4 tracking-tight border-b pb-2">Expense by category</h2>
             {sortedCategories.length === 0 ? (
-              <p className="text-sm text-slate-400 italic">No expenses recorded yet to map allocation profiles.</p>
+              <p className="text-sm text-slate-400 italic">None</p>
             ) : (
               <div className="space-y-4">
                 {sortedCategories.map((cat) => (
@@ -251,7 +237,7 @@ export default function FinanceDashboard() {
           </section>
 
           <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm overflow-hidden">
-            <h2 className="text-xl font-bold mb-4 tracking-tight border-b pb-2">Transaction Feed</h2>
+            <h2 className="text-xl font-bold mb-4 tracking-tight border-b pb-2">Transactions</h2>
             <div className="overflow-x-auto max-h-[400px]">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -267,7 +253,7 @@ export default function FinanceDashboard() {
                   {transactions.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="py-8 text-center text-slate-400 italic">
-                        No transactions logged for this account lifecycle.
+                        No transactions
                       </td>
                     </tr>
                   ) : (
